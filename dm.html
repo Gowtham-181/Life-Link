@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeLink - Organ Donation Portal</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(to bottom right,#e6f2ff,#f0fff4);
+}
+
+/* LOGO */
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:28px;
+    font-weight:700;
+    margin-bottom:25px;
+}
+.logo i{color:#ffeb3b;font-size:34px}
+.logo span span{color:#ffeb3b}
+
+/* AUTH */
+.auth-page{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:url('https://i.ibb.co/2k1CqkK/heart-brain-bg.jpg') center/cover;
+}
+.auth-box{
+    background:rgba(255,255,255,.96);
+    padding:40px;
+    width:380px;
+    border-radius:20px;
+    box-shadow:0 15px 30px rgba(0,0,0,.25);
+    text-align:center;
+}
+.auth-box h3{color:#27ae60;margin-bottom:15px}
+.auth-box input,.auth-box select{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
+.auth-box button{
+    width:100%;
+    padding:12px;
+    background:#27ae60;
+    color:white;
+    border:none;
+    border-radius:30px;
+    font-size:16px;
+}
+.auth-switch button{
+    background:none;
+    border:none;
+    color:#27ae60;
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+/* NAVBAR */
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:260px;
+    height:100%;
+    background:#27ae60;
+    padding:20px;
+    color:white;
+}
+.navbar button{
+    width:100%;
+    padding:14px;
+    margin:6px 0;
+    background:none;
+    border:none;
+    color:white;
+    text-align:left;
+    font-size:17px;
+    border-radius:10px;
+}
+.navbar button:hover{background:rgba(255,255,255,.25)}
+
+/* MAIN */
+.main-content{margin-left:260px;padding:40px}
+.page{display:none;animation:fade .5s}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(20px)}}
+
+/* CARD */
+.card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    max-width:600px;
+}
+.card h2{text-align:center;margin-bottom:20px}
+
+.form-group{margin-bottom:15px}
+.form-group input,.form-group select{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
+button.main{
+    width:100%;
+    padding:12px;
+    background:#27ae60;
+    color:white;
+    border:none;
+    border-radius:30px;
+    font-size:16px;
+}
+
+/* RESULTS */
+.results{margin-top:20px;display:flex;flex-direction:column;gap:15px}
+.result-card{
+    background:#e8fff1;
+    padding:15px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+.result-card b{color:#27ae60}
+.success{color:#27ae60;text-align:center}
+.error{color:red;text-align:center}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="auth-page" id="loginPage">
+<div class="auth-box">
+<div class="logo" style="justify-content:center;color:#27ae60">
+<i class="fas fa-heartbeat"></i>
+<span>Life<span>Link</span></span>
+</div>
+<h3>Welcome to LifeLink 💚</h3>
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<p id="loginMsg"></p>
+<p class="auth-switch">No account?
+<button onclick="showAuth('register')">Register</button></p>
+</div>
+</div>
+
+<!-- REGISTER -->
+<div class="auth-page" id="registerPage" style="display:none">
+<div class="auth-box">
+<div class="logo" style="justify-content:center;color:#27ae60">
+<i class="fas fa-heartbeat"></i>
+<span>Life<span>Link</span></span>
+</div>
+<h3>Create Account</h3>
+<input placeholder="Username">
+<input type="password" placeholder="Password">
+<select>
+<option>Donor</option>
+<option>Receiver</option>
+</select>
+<button onclick="showAuth('login')">Register</button>
+</div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp" style="display:none">
+
+<div class="navbar">
+<div class="logo">
+<i class="fas fa-heartbeat"></i>
+<span>Life<span>Link</span></span>
+</div>
+<button onclick="showPage('donor')">💖 Donor</button>
+<button onclick="showPage('receiver')">🧑‍⚕️ Receiver</button>
+<button onclick="showPage('about')">ℹ️ About</button>
+<button onclick="showPage('contact')">📞 Contact Us</button>
+<button onclick="logout()">🚪 Logout</button>
+</div>
+
+<div class="main-content">
+
+<!-- DONOR -->
+<div class="page active" id="donor">
+<div class="card">
+<h2>💖 Donor Registration</h2>
+<div class="form-group"><input id="dname" placeholder="Donor Name"></div>
+<div class="form-group"><input id="dage" type="number" placeholder="Age"></div>
+<div class="form-group"><input id="dphone" placeholder="Phone Number"></div>
+<div class="form-group">
+<select id="dblood">
+<option value="">Blood Group</option>
+<option>A+</option><option>B+</option><option>O+</option><option>AB+</option>
+</select>
+</div>
+<div class="form-group">
+<select id="dorgan">
+<option value="">Organ</option>
+<option>Kidney</option><option>Liver</option><option>Heart</option>
+</select>
+</div>
+<button class="main" onclick="addDonor()">Register Donor</button>
+<p id="donorMsg"></p>
+</div>
+</div>
+
+<!-- RECEIVER -->
+<div class="page" id="receiver">
+<div class="card">
+<h2>🧑‍⚕️ Receiver</h2>
+<div class="form-group"><input id="rname" placeholder="Receiver Name"></div>
+<div class="form-group">
+<select id="rblood">
+<option value="">Blood Group</option>
+<option>A+</option><option>B+</option><option>O+</option><option>AB+</option>
+</select>
+</div>
+<div class="form-group">
+<select id="rorgan">
+<option value="">Organ</option>
+<option>Kidney</option><option>Liver</option><option>Heart</option>
+</select>
+</div>
+<button class="main" onclick="findDonor()">Find Donors 🔍</button>
+<div id="matchResults" class="results"></div>
+</div>
+</div>
+
+<!-- ABOUT -->
+<div class="page" id="about">
+<div class="card">
+<h2>ℹ️ About LifeLink</h2>
+<p>
+LifeLink is a platform that connects organ donors with receivers.
+Our mission is to save lives using fast and reliable donor matching.
+</p>
+</div>
+</div>
+
+<!-- CONTACT -->
+<div class="page" id="contact">
+<div class="card">
+<h2>📞 Contact Us</h2>
+<p><b>📱 Phone:</b> 9494390698</p>
+<p><b>📧 Email:</b> lifelink@gmail.com</p>
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+let donors=[]
+
+function showAuth(p){
+loginPage.style.display=p==='login'?'flex':'none'
+registerPage.style.display=p==='register'?'flex':'none'
+}
+
+function login(){
+if(user.value && pass.value){
+loginPage.style.display='none'
+mainApp.style.display='block'
+}else loginMsg.innerText="Invalid login"
+}
+
+function showPage(id){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
+document.getElementById(id).classList.add('active')
+}
+
+function addDonor(){
+if(!dname.value || !dage.value || !dphone.value || !dblood.value || !dorgan.value){
+donorMsg.innerText="Please fill all fields"
+donorMsg.className="error"
+return
+}
+donors.push({
+name:dname.value,
+age:dage.value,
+phone:dphone.value,
+blood:dblood.value,
+organ:dorgan.value
+})
+donorMsg.innerText="Donor Registered Successfully 💚"
+donorMsg.className="success"
+}
+
+function findDonor(){
+if(!rname.value || !rblood.value || !rorgan.value){
+matchResults.innerHTML="<p class='error'>Fill all fields</p>"
+return
+}
+let matches=donors.filter(d=>d.blood===rblood.value && d.organ===rorgan.value)
+matchResults.innerHTML=`<h3>Welcome, ${rname.value} 👋</h3>`
+if(matches.length===0){
+matchResults.innerHTML+="<p class='error'>No matching donors found</p>"
+}else{
+matches.forEach(d=>{
+matchResults.innerHTML+=`
+<div class="result-card">
+<p><b>Name:</b> ${d.name}</p>
+<p><b>Age:</b> ${d.age}</p>
+<p><b>Phone:</b> ${d.phone}</p>
+<p><b>Blood:</b> ${d.blood}</p>
+<p><b>Organ:</b> ${d.organ}</p>
+</div>`
+})
+}
+}
+
+function logout(){location.reload()}
+</script>
+
+</body>
+</html>
